@@ -25,6 +25,7 @@
                 <a href="#struttura">Struttura</a>
                 <a href="#dove-siamo">Dove siamo</a>
                 <a href="#contatti">Contatti</a>
+                <a href="#galleria">Galleria</a>
             </nav>
         </div>
     </header>
@@ -134,12 +135,30 @@
                 </div>
             </div>
         </section>
+
+        <section class="section section-soft" id="galleria">
+            <div class="container contact-strip">
+                <div>
+                    <span class="section-kicker">Galleria</span>
+                </div>
+
+                <div class="gallery-grid" id="gallery-grid" aria-live="polite"></div>
+            </div>
+        </section>
     </main>
 
     <a id="whatsapp-link" class="whatsapp-widget" data-whatsapp-link aria-label="Chat su WhatsApp" rel="noreferrer nofollow noopener" target="_blank" href="https://wa.me/">
         <img src="wa.svg" alt="Chat su WhatsApp" loading="lazy">
     </a>
 </div>
+
+<dialog class="lightbox" id="gallery-lightbox" aria-label="Visualizzazione immagine">
+    <button class="lightbox-close" id="lightbox-close" type="button" aria-label="Chiudi galleria">×</button>
+    <figure class="lightbox-figure">
+        <img id="lightbox-image" src="" alt="">
+        <figcaption id="lightbox-caption"></figcaption>
+    </figure>
+</dialog>
 
 <script>
   function deobfuscateNumber(obfuscated) {
@@ -149,6 +168,60 @@
   function formatVisibleNumber(phoneNumber) {
     const localNumber = phoneNumber.startsWith('39') ? phoneNumber.slice(2) : phoneNumber;
     return localNumber.replace(/(\d{3})(\d{3})(\d{4})/, '$1 $2 $3');
+  }
+
+  function createGalleryItem(item, index) {
+    const button = document.createElement('button');
+    button.className = 'gallery-item';
+    button.type = 'button';
+    button.setAttribute('aria-label', 'Apri immagine ' + (index + 1));
+
+    const img = document.createElement('img');
+    img.src = item.thumb || item.src;
+    img.alt = item.alt || "Sant'Antonio Equestrian Center";
+    img.loading = 'lazy';
+    img.decoding = 'async';
+
+    const overlay = document.createElement('span');
+    overlay.className = 'gallery-item-overlay';
+    overlay.textContent = item.title || "Sant'Antonio Equestrian Center";
+
+    button.appendChild(img);
+    button.appendChild(overlay);
+    button.addEventListener('click', function () {
+      openLightbox(item);
+    });
+
+    return button;
+  }
+
+  function openLightbox(item) {
+    const lightbox = document.getElementById('gallery-lightbox');
+    const lightboxImage = document.getElementById('lightbox-image');
+    const lightboxCaption = document.getElementById('lightbox-caption');
+
+    lightboxImage.src = item.src;
+    lightboxImage.alt = item.alt || "Sant'Antonio Equestrian Center";
+    lightboxCaption.textContent = item.title || "Sant'Antonio Equestrian Center";
+
+    if (typeof lightbox.showModal === 'function') {
+      lightbox.showModal();
+    } else {
+      lightbox.setAttribute('open', 'open');
+    }
+    document.body.classList.add('lightbox-open');
+  }
+
+  function closeLightbox() {
+    const lightbox = document.getElementById('gallery-lightbox');
+    const lightboxImage = document.getElementById('lightbox-image');
+    if (typeof lightbox.close === 'function') {
+      lightbox.close();
+    } else {
+      lightbox.removeAttribute('open');
+    }
+    lightboxImage.src = '';
+    document.body.classList.remove('lightbox-open');
   }
 
   document.addEventListener('DOMContentLoaded', function() {
@@ -179,6 +252,46 @@
 
     document.querySelectorAll('[data-whatsapp-link]').forEach(function(link) {
       link.href = whatsappUrl;
+    });
+
+    const galleryGrid = document.getElementById('gallery-grid');
+    const galleryEmpty = document.getElementById('gallery-empty');
+
+    fetch('gallery/gallery.json', { cache: 'no-store' })
+      .then(function(response) {
+        if (!response.ok) {
+          throw new Error('Manifest non disponibile');
+        }
+        return response.json();
+      })
+      .then(function(images) {
+        if (!Array.isArray(images) || images.length === 0) {
+          galleryEmpty.hidden = false;
+          return;
+        }
+
+        images.forEach(function(item, index) {
+          galleryGrid.appendChild(createGalleryItem(item, index));
+        });
+      })
+      .catch(function() {
+        galleryEmpty.hidden = false;
+      });
+
+    const lightbox = document.getElementById('gallery-lightbox');
+    document.getElementById('lightbox-close').addEventListener('click', closeLightbox);
+    lightbox.addEventListener('click', function(event) {
+      if (event.target === lightbox) {
+        closeLightbox();
+      }
+    });
+    lightbox.addEventListener('close', function() {
+      document.body.classList.remove('lightbox-open');
+    });
+    document.addEventListener('keydown', function(event) {
+      if (event.key === 'Escape' && lightbox.hasAttribute('open')) {
+        closeLightbox();
+      }
     });
   });
 </script>

@@ -1,0 +1,39 @@
+name: Build gallery assets
+
+on:
+  push:
+    branches: ["main", "master"]
+    paths:
+      - "gallery/**"
+      - "scripts/generate_gallery.py"
+      - ".github/workflows/gallery.yml"
+      - "index.html"
+      - "styles.css"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-gallery:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install pillow
+
+      - name: Generate manifest and thumbnails
+        run: python scripts/generate_gallery.py
+
+      - name: Commit generated files
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "Aggiorna galleria automatica"
+          file_pattern: gallery/gallery.json assets/gallery/thumbs/*
