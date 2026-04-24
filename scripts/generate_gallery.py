@@ -40,10 +40,8 @@ for path in sorted(GALLERY_DIR.iterdir() if GALLERY_DIR.exists() else []):
     entries.append({
         "src": f"gallery/{path.name}",
         "thumb": f"gallery/thumbs/{thumb_name}",
-        "alt": "Sant'Antonio Equestrian Center",
         "width": width,
         "height": height,
-        "title": "Sant'Antonio Equestrian Center"
     })
 
 MANIFEST.write_text(json.dumps(entries, ensure_ascii=False, indent=2), encoding="utf-8")

@@ -136,13 +136,18 @@
             </div>
         </section>
 
-        <section class="section section-soft" id="galleria">
-            <div class="container contact-strip">
-                <div>
+        <section class="section section-soft gallery-section" id="galleria">
+            <div class="container">
+                <div class="section-heading gallery-heading">
                     <span class="section-kicker">Galleria</span>
+                    <h2>Foto della struttura</h2>
                 </div>
 
                 <div class="gallery-grid" id="gallery-grid" aria-live="polite"></div>
+                <div class="gallery-empty-card" id="gallery-empty" hidden>
+                    <h3>Galleria in aggiornamento</h3>
+                    <p>Le foto saranno disponibili a breve.</p>
+                </div>
             </div>
         </section>
     </main>
@@ -155,8 +160,7 @@
 <dialog class="lightbox" id="gallery-lightbox" aria-label="Visualizzazione immagine">
     <button class="lightbox-close" id="lightbox-close" type="button" aria-label="Chiudi galleria">×</button>
     <figure class="lightbox-figure">
-        <img id="lightbox-image" src="" alt="">
-        <figcaption id="lightbox-caption"></figcaption>
+        <img id="lightbox-image" src="">
     </figure>
 </dialog>
 
@@ -176,18 +180,16 @@
     button.type = 'button';
     button.setAttribute('aria-label', 'Apri immagine ' + (index + 1));
 
+    const media = document.createElement('span');
+    media.className = 'gallery-item-media';
+
     const img = document.createElement('img');
     img.src = item.thumb || item.src;
-    img.alt = item.alt || "Sant'Antonio Equestrian Center";
     img.loading = 'lazy';
     img.decoding = 'async';
 
-    const overlay = document.createElement('span');
-    overlay.className = 'gallery-item-overlay';
-    overlay.textContent = item.title || "Sant'Antonio Equestrian Center";
-
-    button.appendChild(img);
-    button.appendChild(overlay);
+    media.appendChild(img);
+    button.appendChild(media);
     button.addEventListener('click', function () {
       openLightbox(item);
     });
@@ -198,11 +200,8 @@
   function openLightbox(item) {
     const lightbox = document.getElementById('gallery-lightbox');
     const lightboxImage = document.getElementById('lightbox-image');
-    const lightboxCaption = document.getElementById('lightbox-caption');
 
     lightboxImage.src = item.src;
-    lightboxImage.alt = item.alt || "Sant'Antonio Equestrian Center";
-    lightboxCaption.textContent = item.title || "Sant'Antonio Equestrian Center";
 
     if (typeof lightbox.showModal === 'function') {
       lightbox.showModal();
@@ -266,7 +265,9 @@
       })
       .then(function(images) {
         if (!Array.isArray(images) || images.length === 0) {
-          galleryEmpty.hidden = false;
+          if (galleryEmpty) {
+            galleryEmpty.hidden = false;
+          }
           return;
         }
 
@@ -275,7 +276,9 @@
         });
       })
       .catch(function() {
-        galleryEmpty.hidden = false;
+        if (galleryEmpty) {
+          galleryEmpty.hidden = false;
+        }
       });
 
     const lightbox = document.getElementById('gallery-lightbox');
