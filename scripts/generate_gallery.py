@@ -4,18 +4,18 @@ import json
 
 ROOT = Path(__file__).resolve().parents[1]
 GALLERY_DIR = ROOT / "gallery"
-THUMBS_DIR = ROOT / "assets" / "gallery" / "thumbs"
+THUMBS_DIR = GALLERY_DIR / "thumbs"
 MANIFEST = GALLERY_DIR / "gallery.json"
 VALID_EXT = {".jpg", ".jpeg", ".png", ".webp", ".gif"}
 THUMB_SIZE = (640, 480)
-GITKEEP = THUMBS_DIR / ".gitkeep"
+KEEP_FILE = THUMBS_DIR / ".gitignore"
 
 THUMBS_DIR.mkdir(parents=True, exist_ok=True)
-GITKEEP.touch(exist_ok=True)
+KEEP_FILE.touch(exist_ok=True)
 
-# Remove stale generated thumbnails but keep .gitkeep.
+# Remove stale generated thumbnails but keep the tracked directory marker.
 for existing in THUMBS_DIR.iterdir():
-    if existing.is_file() and existing.name != ".gitkeep":
+    if existing.is_file() and existing.name != KEEP_FILE.name:
         existing.unlink()
 
 entries = []
@@ -39,7 +39,7 @@ for path in sorted(GALLERY_DIR.iterdir() if GALLERY_DIR.exists() else []):
 
     entries.append({
         "src": f"gallery/{path.name}",
-        "thumb": f"assets/gallery/thumbs/{thumb_name}",
+        "thumb": f"gallery/thumbs/{thumb_name}",
         "alt": "Sant'Antonio Equestrian Center",
         "width": width,
         "height": height,
