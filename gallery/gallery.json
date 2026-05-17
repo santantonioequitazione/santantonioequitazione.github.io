@@ -1,3 +1,44 @@
 [
-
+  {
+    "src": "gallery/DSC_0374.JPG",
+    "thumb": "gallery/thumbs/DSC_0374.webp",
+    "width": 1023,
+    "height": 1537
+  },
+  {
+    "src": "gallery/DSC_0444.JPG",
+    "thumb": "gallery/thumbs/DSC_0444.webp",
+    "width": 6016,
+    "height": 4016
+  },
+  {
+    "src": "gallery/DSC_0525.JPG",
+    "thumb": "gallery/thumbs/DSC_0525.webp",
+    "width": 1535,
+    "height": 1025
+  },
+  {
+    "src": "gallery/DSC_0601.JPG",
+    "thumb": "gallery/thumbs/DSC_0601.webp",
+    "width": 6016,
+    "height": 4016
+  },
+  {
+    "src": "gallery/DSC_0666.JPG",
+    "thumb": "gallery/thumbs/DSC_0666.webp",
+    "width": 6016,
+    "height": 4016
+  },
+  {
+    "src": "gallery/DSC_0733.JPG",
+    "thumb": "gallery/thumbs/DSC_0733.webp",
+    "width": 6016,
+    "height": 4016
+  },
+  {
+    "src": "gallery/IMG_5888.JPG",
+    "thumb": "gallery/thumbs/IMG_5888.webp",
+    "width": 6000,
+    "height": 4000
+  }
 ]
