@@ -783,14 +783,17 @@ a.lightbox-close {
 
 .lightbox[open] {
   display: grid;
+  place-items: center;
+  min-height: 100dvh;
 }
 
 .lightbox-figure {
   position: relative;
   margin: 0;
   display: grid;
-  gap: 0.8rem;
-  justify-items: center;
+  width: 100%;
+  min-height: calc(100dvh - 2rem);
+  place-items: center;
 }
 
 .lightbox-figure img {
@@ -825,6 +828,57 @@ a.lightbox-close {
   backdrop-filter: blur(8px);
   appearance: none;
   -webkit-appearance: none;
+}
+
+.lightbox-nav {
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 100;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.94);
+  color: #111;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.3);
+  font-size: 2rem;
+  line-height: 1;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.lightbox-prev {
+  left: calc(env(safe-area-inset-left, 0px) + 0.8rem);
+}
+
+.lightbox-next {
+  right: calc(env(safe-area-inset-right, 0px) + 0.8rem);
+}
+
+.lightbox-nav:hover {
+  background: #fff;
+}
+
+.lightbox-nav:focus {
+  outline: 0;
+}
+
+.lightbox-nav:focus-visible {
+  background: #fff;
+  outline: 3px solid rgba(255, 255, 255, 0.42);
+  outline-offset: 3px;
+}
+
+.lightbox-nav[disabled] {
+  opacity: 0.45;
+  cursor: default;
 }
 
 .lightbox-close:hover {
@@ -879,5 +933,19 @@ body.lightbox-open .whatsapp-widget {
     right: calc(env(safe-area-inset-right, 0px) + 0.6rem);
     width: 50px;
     height: 50px;
+  }
+
+  .lightbox-nav {
+    width: 48px;
+    height: 48px;
+    font-size: 1.8rem;
+  }
+
+  .lightbox-prev {
+    left: calc(env(safe-area-inset-left, 0px) + 0.35rem);
+  }
+
+  .lightbox-next {
+    right: calc(env(safe-area-inset-right, 0px) + 0.35rem);
   }
 }
