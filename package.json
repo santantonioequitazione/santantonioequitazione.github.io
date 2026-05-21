@@ -1,0 +1,12 @@
+{
+  "name": "santantonioequitazione.github.io",
+  "private": true,
+  "scripts": {
+    "build:min": "terser script.js -c -m -o script.min.js && cleancss -O2 -o styles.min.css styles.css",
+    "check:min": "npm run build:min && git diff --exit-code -- script.min.js styles.min.css"
+  },
+  "devDependencies": {
+    "clean-css-cli": "^5.6.3",
+    "terser": "^5.31.6"
+  }
+}
